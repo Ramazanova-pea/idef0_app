@@ -16,6 +16,22 @@ class _AuthScreenState extends State<AuthScreen> {
   final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  String _imageUrl = 'https://cdn-icons-png.flaticon.com/512/11218/11218238.png';
+  final String _errorImageUrl = 'https://cdn-icons-png.flaticon.com/512/4225/4225690.png';
+
+  void _tryLogin() {
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _imageUrl = 'https://cdn-icons-png.flaticon.com/512/11218/11218238.png';
+      });
+      widget.onLogin(_loginController.text, _passwordController.text);
+    } else {
+      setState(() {
+        _imageUrl = _errorImageUrl;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,8 +43,7 @@ class _AuthScreenState extends State<AuthScreen> {
           child: Column(
             children: [
               CachedNetworkImage(
-                imageUrl:
-                'https://cdn-icons-png.flaticon.com/512/11218/11218238.png',
+                imageUrl: _imageUrl,
                 height: 150,
                 fit: BoxFit.cover,
                 placeholder: (context, url) =>
@@ -53,11 +68,7 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    widget.onLogin(_loginController.text, _passwordController.text);
-                  }
-                },
+                onPressed: _tryLogin,
                 child: const Text('Войти'),
               ),
               TextButton(
