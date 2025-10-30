@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class AuthScreen extends StatefulWidget {
   final void Function(String login, String password) onLogin;
@@ -25,6 +26,19 @@ class _AuthScreenState extends State<AuthScreen> {
           key: _formKey,
           child: Column(
             children: [
+              CachedNetworkImage(
+                imageUrl:
+                'https://cdn-icons-png.flaticon.com/512/11218/11218238.png',
+                height: 150,
+                fit: BoxFit.cover,
+                placeholder: (context, url) =>
+                const CircularProgressIndicator(), // пока грузится
+                errorWidget: (context, url, error) =>
+                const Icon(Icons.error, color: Colors.red), // если ошибка
+              ),
+
+              const SizedBox(height: 20),
+
               TextFormField(
                 controller: _loginController,
                 decoration: const InputDecoration(labelText: 'Логин'),
