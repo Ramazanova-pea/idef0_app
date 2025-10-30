@@ -34,7 +34,6 @@ class _TextEditorScreenState extends State<TextEditorScreen> {
                   updatedAt: DateTime.now(),
                 );
                 widget.onSave(newBlock);
-                Navigator.pop(context);
               }
             },
           )

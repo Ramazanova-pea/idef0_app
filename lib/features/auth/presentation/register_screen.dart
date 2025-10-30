@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 
 class RegisterScreen extends StatefulWidget {
   final void Function(String login, String password) onRegister;
@@ -24,6 +26,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
           key: _formKey,
           child: Column(
             children: [
+              CachedNetworkImage(
+                imageUrl:
+                'https://cdn-icons-png.flaticon.com/512/12449/12449038.png',
+                height: 150,
+                fit: BoxFit.cover,
+                placeholder: (context, url) =>
+                const CircularProgressIndicator(), // пока грузится
+                errorWidget: (context, url, error) =>
+                const Icon(Icons.error, color: Colors.red), // если ошибка
+              ),
+
+              const SizedBox(height: 20),
+
               TextFormField(
                 controller: _loginController,
                 decoration: const InputDecoration(labelText: 'Логин'),
