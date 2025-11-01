@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:idef0_app/widgets/text_block_row.dart';
 import '../domain/text_block_model.dart';
 
 
@@ -24,19 +25,10 @@ class TextListScreen extends StatelessWidget {
         itemCount: blocks.length,
         itemBuilder: (context, index) {
           final block = blocks[index];
-          return Card(
-            child: ListTile(
-              title: Text(block.title),
-              subtitle: Text(block.content, maxLines: 2, overflow: TextOverflow.ellipsis),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(icon: const Icon(Icons.edit), onPressed: () => onEdit(block)),
-                  IconButton(icon: const Icon(Icons.delete), onPressed: () => onDelete(block)),
-                ],
-              ),
-            ),
-          );
+          return TextBlockRow(
+            block: block,
+            onEdit: onEdit != null ? () => onEdit!(block) : null,
+            onRemove: onDelete != null ? () => onDelete!(block) : null);
         },
       ),
       floatingActionButton: FloatingActionButton(
