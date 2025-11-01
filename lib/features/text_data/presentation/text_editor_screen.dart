@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../domain/text_block_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class TextEditorScreen extends StatefulWidget {
   final TextBlockModel? initialBlock;
@@ -45,6 +46,21 @@ class _TextEditorScreenState extends State<TextEditorScreen> {
           key: _formKey,
           child: Column(
             children: [
+              CachedNetworkImage(
+                imageUrl:
+                'https://img.icons8.com/?size=100&id=64062&format=png&color=000000',
+                height: 150,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  color: Colors.grey[300],
+                  child: Icon(Icons.image),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  color: Colors.grey[300],
+                  child: Icon(Icons.error),
+                ),
+              ),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: _titleController,
                 decoration: const InputDecoration(labelText: 'Название блока'),
