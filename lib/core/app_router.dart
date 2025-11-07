@@ -16,14 +16,7 @@ class AppRouter {
         path: '/auth',
         name: 'auth',
         builder: (BuildContext context, GoRouterState state) {
-          return AuthScreen(
-            onLogin: (String login, String password) {
-              context.go('/texts');
-            },
-            onRegisterTap: () {
-              context.push('/register');
-            },
-          );
+          return const AuthScreen();
         },
       ),
 

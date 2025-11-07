@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:go_router/go_router.dart';
 
 class AuthScreen extends StatefulWidget {
-  final void Function(String login, String password) onLogin;
-  final VoidCallback onRegisterTap;
 
-  const AuthScreen({required this.onLogin, required this.onRegisterTap, super.key});
+  const AuthScreen({super.key});
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -24,12 +23,16 @@ class _AuthScreenState extends State<AuthScreen> {
       setState(() {
         _imageUrl = 'https://cdn-icons-png.flaticon.com/512/11218/11218238.png';
       });
-      widget.onLogin(_loginController.text, _passwordController.text);
+      context.go('/texts');
     } else {
       setState(() {
         _imageUrl = _errorImageUrl;
       });
     }
+  }
+
+  void _navigateToRegister() {
+    context.push('/register');
   }
 
   @override
@@ -72,7 +75,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 child: const Text('Войти'),
               ),
               TextButton(
-                onPressed: widget.onRegisterTap,
+                onPressed: _navigateToRegister,
                 child: const Text('Создать аккаунт'),
               ),
             ],
@@ -80,5 +83,12 @@ class _AuthScreenState extends State<AuthScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _loginController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }
