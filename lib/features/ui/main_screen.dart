@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../text_data/domain/text_block_model.dart';
 import '../text_data/presentation/text_editor_screen.dart';
 import '../text_data/presentation/text_list_screen.dart';
@@ -14,12 +15,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<TextBlockModel> _blocks = [];
 
   void _onAdd() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => TextEditorScreen(onSave: _onSave),
-      ),
-    );
+    context.push('/texts/edit');
   }
 
   void _onEdit(TextBlockModel block) {
