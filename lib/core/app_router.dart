@@ -24,10 +24,7 @@ class AppRouter {
         path: '/register',
         name: 'register',
         builder: (BuildContext context, GoRouterState state) {
-          return RegisterScreen(
-            onRegister: (String login, String password) {context.pop();
-            },
-          );
+          return const RegisterScreen();
         },
       ),
 
