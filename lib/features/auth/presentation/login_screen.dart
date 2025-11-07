@@ -21,9 +21,10 @@ class _AuthScreenState extends State<AuthScreen> {
   void _tryLogin() {
     if (_formKey.currentState!.validate()) {
       setState(() {
-        _imageUrl = 'https://cdn-icons-png.flaticon.com/512/11218/11218238.png';
+        _imageUrl =
+        'https://cdn-icons-png.flaticon.com/512/11218/11218238.png';
       });
-      context.go('/texts');
+      context.pushReplacement('/texts');
     } else {
       setState(() {
         _imageUrl = _errorImageUrl;
