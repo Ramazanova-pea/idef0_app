@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../ui/main_screen.dart';
+
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -21,7 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         title: const Text('Регистрация'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(), // Навигация назад
+          onPressed: () => Navigator.of(context).pop(), // Навигация назад
         ),
       ),
       body: Padding(
@@ -61,7 +63,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  context.pushReplacement('/texts');
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => MainScreen()),
+                  );
                 },
                 child: const Text('Зарегистрироваться'),
               ),

@@ -21,7 +21,7 @@ class _TextEditorScreenState extends State<TextEditorScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.initialBlock == null ? 'Добавить текст' : 'Редактировать текст'),
+        title: Text(widget.initialBlock == null ? 'Добавить блок' : 'Редактировать текст'),
         actions: [
           IconButton(
             icon: const Icon(Icons.save),

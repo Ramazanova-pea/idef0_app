@@ -9,7 +9,7 @@ class TextListScreen extends StatelessWidget {
   final void Function(TextBlockModel) onDelete;
   final VoidCallback onAdd;
 
-  const TextListScreen({
+  TextListScreen({
     required this.blocks,
     required this.onEdit,
     required this.onDelete,

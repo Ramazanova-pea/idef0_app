@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-import 'core/app_router.dart';
+import 'features/auth/presentation/login_screen.dart';
+import 'features/auth/presentation/register_screen.dart';
+import 'features/ui/main_screen.dart';
 
 
 void main() {
@@ -13,8 +14,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: AppRouter.router,
+    return MaterialApp(
       title: 'Text Editor App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -22,6 +22,12 @@ class MyApp extends StatelessWidget {
       ),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.light,
+      initialRoute: '/',
+      routes: {
+        '/': (context) => AuthScreen(),
+        '/register': (context) => RegisterScreen(),
+        '/texts': (context) => MainScreen(),
+      },
       debugShowCheckedModeBanner: false,
     );
   }

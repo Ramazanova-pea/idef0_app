@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
+import 'package:idef0_app/features/auth/presentation/register_screen.dart';
+
+import '../../ui/main_screen.dart';
 
 class AuthScreen extends StatefulWidget {
 
@@ -24,7 +27,9 @@ class _AuthScreenState extends State<AuthScreen> {
         _imageUrl =
         'https://cdn-icons-png.flaticon.com/512/11218/11218238.png';
       });
-      context.pushReplacement('/texts');
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => MainScreen()),
+      );
     } else {
       setState(() {
         _imageUrl = _errorImageUrl;
@@ -33,7 +38,9 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void _navigateToRegister() {
-    context.push('/register');
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => RegisterScreen()),
+    );
   }
 
   @override

@@ -7,6 +7,7 @@ import '../features/text_data/domain/text_block_model.dart';
 import '../features/text_data/presentation/text_editor_screen.dart';
 import '../features/text_data/presentation/text_list_screen.dart';
 
+import '../features/ui/main_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -32,28 +33,32 @@ class AppRouter {
         path: '/texts',
         name: 'texts',
         builder: (BuildContext context, GoRouterState state) {
-          final List<TextBlockModel> blocks = [];
-
-          return TextListScreen(
-            blocks: blocks,
-            onEdit: (TextBlockModel block) {
-              context.push('/texts/edit', extra: block);
-            },
-            onDelete: (TextBlockModel block) {},
-            onAdd: () {},
-          );
+          return const MainScreen();
         },
         routes: [
           GoRoute(
-            path: 'edit',
-            name: 'text_editor',
+            path: 'add',
+            name: 'text_add',
             builder: (BuildContext context, GoRouterState state) {
-              final TextBlockModel? initialBlock = state.extra as TextBlockModel?;
+              return TextEditorScreen(
+                initialBlock: null,
+                onSave: (TextBlockModel block) {
+                  context.pop(block);
+                },
+              );
+            },
+          ),
+          GoRoute(
+            path: 'edit',
+            name: 'text_edit',
+            builder: (BuildContext context, GoRouterState state) {
+              final TextBlockModel? initialBlock =
+                  state.extra as TextBlockModel?;
 
               return TextEditorScreen(
                 initialBlock: initialBlock,
                 onSave: (TextBlockModel block) {
-                  context.pop();
+                  context.pop(block);
                 },
               );
             },
