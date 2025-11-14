@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:idef0_app/features/auth/presentation/register_screen.dart';
+import 'package:provider/provider.dart';
 
+import '../../../core/app_state/app_state_data.dart';
 import '../../ui/main_screen.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -23,6 +25,9 @@ class _AuthScreenState extends State<AuthScreen> {
 
   void _tryLogin() {
     if (_formKey.currentState!.validate()) {
+      final appStateData = Provider.of<AppStateData>(context, listen: false);
+      appStateData.login(_loginController.text);
+
       setState(() {
         _imageUrl =
         'https://cdn-icons-png.flaticon.com/512/11218/11218238.png';

@@ -14,31 +14,34 @@ class TextEditorScreen extends StatefulWidget {
 
 class _TextEditorScreenState extends State<TextEditorScreen> {
   final _formKey = GlobalKey<FormState>();
-  late final _titleController = TextEditingController(text: widget.initialBlock?.title ?? '');
-  late final _contentController = TextEditingController(text: widget.initialBlock?.content ?? '');
+  late final _titleController = TextEditingController(
+    text: widget.initialBlock?.title ?? '',
+  );
+  late final _contentController = TextEditingController(
+    text: widget.initialBlock?.content ?? '',
+  );
+
+  void _save() {
+    if (_formKey.currentState!.validate()) {
+      final newBlock = TextBlockModel(
+        id: widget.initialBlock?.id ?? DateTime.now().toString(),
+        userId: widget.initialBlock?.userId ?? "default_user",
+        title: _titleController.text,
+        content: _contentController.text,
+        updatedAt: DateTime.now(),
+      );
+      widget.onSave(newBlock);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.initialBlock == null ? 'Добавить блок' : 'Редактировать текст'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.save),
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                final newBlock = TextBlockModel(
-                  id: widget.initialBlock?.id ?? DateTime.now().toString(),
-                  userId: widget.initialBlock?.userId ?? "default_user",
-                  title: _titleController.text,
-                  content: _contentController.text,
-                  updatedAt: DateTime.now(),
-                );
-                widget.onSave(newBlock);
-              }
-            },
-          )
-        ],
+        title: Text(
+          widget.initialBlock == null ? 'Добавить блок' : 'Редактировать текст',
+        ),
+        actions: [IconButton(icon: const Icon(Icons.save), onPressed: _save)],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -48,7 +51,7 @@ class _TextEditorScreenState extends State<TextEditorScreen> {
             children: [
               CachedNetworkImage(
                 imageUrl:
-                'https://img.icons8.com/?size=100&id=64062&format=png&color=000000',
+                    'https://img.icons8.com/?size=100&id=64062&format=png&color=000000',
                 height: 150,
                 fit: BoxFit.cover,
                 placeholder: (context, url) => Container(
@@ -64,19 +67,30 @@ class _TextEditorScreenState extends State<TextEditorScreen> {
               TextFormField(
                 controller: _titleController,
                 decoration: const InputDecoration(labelText: 'Название блока'),
-                validator: (value) => value == null || value.isEmpty ? 'Введите название' : null,
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Введите название' : null,
               ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: _contentController,
-                decoration: const InputDecoration(labelText: 'Содержимое блока'),
+                decoration: const InputDecoration(
+                  labelText: 'Содержимое блока',
+                ),
                 maxLines: 6,
-                validator: (value) => value == null || value.isEmpty ? 'Введите текст' : null,
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Введите текст' : null,
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _contentController.dispose();
+    super.dispose();
   }
 }

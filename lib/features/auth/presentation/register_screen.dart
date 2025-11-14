@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/app_state/app_state.dart';
 import '../../ui/main_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -15,6 +16,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  void _register() {
+    if (_formKey.currentState!.validate()) {
+      final appStateData = AppState.of(context).data;
+
+      appStateData.login(_loginController.text);
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => MainScreen()),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,11 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => MainScreen()),
-                  );
-                },
+                onPressed: _register,
                 child: const Text('Зарегистрироваться'),
               ),
             ],

@@ -1,68 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../core/app_state/app_state_data.dart';
 import '../text_data/domain/text_block_model.dart';
 import '../text_data/presentation/text_editor_screen.dart';
 import '../text_data/presentation/text_list_screen.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends StatelessWidget  {
   const MainScreen({super.key});
 
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  final List<TextBlockModel> _blocks = [];
-
-  void _onAdd() {
+  void _onAdd(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => TextEditorScreen(
           initialBlock: null,
-          onSave: _onSave,
+          onSave: (newBlock) {
+            final appStateData = Provider.of<AppStateData>(context, listen: false);
+            appStateData.addTextBlock(newBlock);
+            Navigator.of(context).pop();
+          },
         ),
       ),
     );
   }
 
-  void _onEdit(TextBlockModel block) {
+  void _onEdit(BuildContext context, TextBlockModel block) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => TextEditorScreen(
           initialBlock: block,
-          onSave: _onSave,
+          onSave: (updatedBlock) {
+            final appStateData = Provider.of<AppStateData>(context, listen: false);
+            appStateData.updateTextBlock(updatedBlock);
+            Navigator.of(context).pop();
+          },
         ),
       ),
     );
   }
 
-  void _onDelete(TextBlockModel block) {
-    setState(() {
-      _blocks.removeWhere((b) => b.id == block.id);
-    });
+  void _onDelete(BuildContext context,TextBlockModel block) {
+    final appStateData = Provider.of<AppStateData>(context, listen: false);
+    appStateData.deleteTextBlock(block);
   }
 
-  void _onSave(TextBlockModel block) {
-    setState(() {
-      final index = _blocks.indexWhere((b) => b.id == block.id);
-      if (index >= 0) {
-        _blocks[index] = block.copyWith(
-          title: block.title,
-          content: block.content,
-        );
-      } else {
-        _blocks.add(block);
-      }
-    });
-    Navigator.of(context).pop();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return TextListScreen(
-      blocks: _blocks,
-      onAdd: _onAdd,
-      onEdit: _onEdit,
-      onDelete: _onDelete,
+    return Consumer<AppStateData>(
+      builder: (context, appStateData, child) {
+        return TextListScreen(
+          blocks: appStateData.textBlocks,
+          onAdd: () => _onAdd(context),
+          onEdit: (block) => _onEdit(context, block),
+          onDelete: (block) => _onDelete(context, block),
+        );
+      },
     );
   }
 }
