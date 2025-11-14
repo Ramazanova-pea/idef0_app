@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../../core/app_state/app_state.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/providers/app_state_provider.dart';
 import '../../ui/main_screen.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends ConsumerStatefulWidget  {
   const RegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
 
   void _register() {
     if (_formKey.currentState!.validate()) {
-      final appStateData = AppState.of(context).data;
-
-      appStateData.login(_loginController.text);
+      ref.read(appStateProvider.notifier).login(_loginController.text);
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => MainScreen()),

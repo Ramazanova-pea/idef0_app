@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:idef0_app/features/auth/presentation/register_screen.dart';
-
-import '../../../core/app_state/app_state_data.dart';
-import '../../../core/get_it/service_locator.dart';
+import '../../../core/providers/app_state_provider.dart';
 import '../../ui/main_screen.dart';
 
-class AuthScreen extends StatefulWidget {
+class AuthScreen extends ConsumerStatefulWidget  {
   const AuthScreen({super.key});
 
   @override
-  State<AuthScreen> createState() => _AuthScreenState();
+  ConsumerState<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _AuthScreenState extends ConsumerState<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
   final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -25,21 +24,14 @@ class _AuthScreenState extends State<AuthScreen> {
 
   void _tryLogin() {
     if (_formKey.currentState!.validate()) {
-      if (locator.isRegistered<AppStateData>()) {
-        final appStateData = locator.get<AppStateData>();
-        appStateData.login(_loginController.text);
-
-        setState(() {
-          _imageUrl =
-              'https://cdn-icons-png.flaticon.com/512/11218/11218238.png';
-        });
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => MainScreen()),
-        );
-      } else {
-        // Обработка случая, когда сервис не зарегистрирован
-        print('Service not available');
-      }
+      ref.read(appStateProvider.notifier).login(_loginController.text);
+      setState(() {
+        _imageUrl =
+        'https://cdn-icons-png.flaticon.com/512/11218/11218238.png';
+      });
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => MainScreen()),
+      );
     } else {
       setState(() {
         _imageUrl = _errorImageUrl;

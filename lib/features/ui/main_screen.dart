@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../core/app_state/app_state_data.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../core/providers/app_state_provider.dart';
 import '../text_data/domain/text_block_model.dart';
 import '../text_data/presentation/text_editor_screen.dart';
 import '../text_data/presentation/text_list_screen.dart';
 
-class MainScreen extends StatelessWidget  {
+class MainScreen extends ConsumerWidget   {
   const MainScreen({super.key});
 
-  void _onAdd(BuildContext context) {
+  void _onAdd(BuildContext context, WidgetRef ref) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => TextEditorScreen(
           initialBlock: null,
           onSave: (newBlock) {
-            final appStateData = Provider.of<AppStateData>(context, listen: false);
-            appStateData.addTextBlock(newBlock);
+            ref.read(appStateProvider.notifier).addTextBlock(newBlock);
             Navigator.of(context).pop();
           },
         ),
@@ -23,14 +22,13 @@ class MainScreen extends StatelessWidget  {
     );
   }
 
-  void _onEdit(BuildContext context, TextBlockModel block) {
+  void _onEdit(BuildContext context, WidgetRef ref, TextBlockModel block) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => TextEditorScreen(
           initialBlock: block,
           onSave: (updatedBlock) {
-            final appStateData = Provider.of<AppStateData>(context, listen: false);
-            appStateData.updateTextBlock(updatedBlock);
+            ref.read(appStateProvider.notifier).updateTextBlock(updatedBlock);
             Navigator.of(context).pop();
           },
         ),
@@ -38,23 +36,20 @@ class MainScreen extends StatelessWidget  {
     );
   }
 
-  void _onDelete(BuildContext context,TextBlockModel block) {
-    final appStateData = Provider.of<AppStateData>(context, listen: false);
-    appStateData.deleteTextBlock(block);
+  void _onDelete(WidgetRef ref,TextBlockModel block) {
+    ref.read(appStateProvider.notifier).deleteTextBlock(block);
   }
 
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer<AppStateData>(
-      builder: (context, appStateData, child) {
-        return TextListScreen(
-          blocks: appStateData.textBlocks,
-          onAdd: () => _onAdd(context),
-          onEdit: (block) => _onEdit(context, block),
-          onDelete: (block) => _onDelete(context, block),
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appState = ref.watch(appStateProvider);
+
+    return TextListScreen(
+          blocks: appState.textBlocks,
+          onAdd: () => _onAdd(context, ref),
+          onEdit: (block) => _onEdit(context, ref, block),
+          onDelete: (block) => _onDelete(ref, block),
     );
   }
 }
